@@ -31,7 +31,7 @@ class Activator {
 					// Sets the default settings values on activation
 					Settings::set_default_on_activate();
 				}
-			}
+			} 
 		} catch (Error $e) {
 			Log::info('Error during SWPE activation: '.$e);
 		}

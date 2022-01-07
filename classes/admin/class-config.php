@@ -28,7 +28,7 @@ class Config {
 		$this->plugin_version = $plugin_version;
 		$this->plugin_basename = $plugin_basename;
 		$this->plugin_url = $plugin_url;
-	}
+	} 
 	
 	public function setup() {
         if (is_admin()) {

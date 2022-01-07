@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
 			displayAdminNotice('Please wait for the previous job request to be completed.', MessageType.error);
 		}
 	});
-});
+}); 
 
 /**
  * Create and show a dismissible admin notice

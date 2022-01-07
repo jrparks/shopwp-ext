@@ -59,4 +59,4 @@ function swpe_run_plugin() {
 	$plugin = new\SWPE\SWPE_Plugin($plugin_basename, $plugin_url);
 	$plugin->initialize();
 }
-swpe_run_plugin();
+swpe_run_plugin(); 

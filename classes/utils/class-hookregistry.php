@@ -39,7 +39,7 @@ class HookRegistry {
 		$type = strtolower( $type );
 		if (!array_key_exists($type, $this->hook_types)) {
 			Log::debug('SWPE No proper hook type defined.'.$type, true);
-		}
+		} 
 		
 		if ( 'filter' === $type ) {
 			if (!array_key_exists($id, $this->registry)) {

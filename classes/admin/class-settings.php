@@ -26,7 +26,7 @@ class Settings {
 	public function __construct() {
 		$this->registry = HookRegistry::get();
 		$this->extImgLib = new External_Images();
-	}
+	} 
 	
 	public function setup() {
 		$this->registry->add_hook( 'admin_add_plugin_page', 'action', 'admin_menu', $this, 'admin_add_plugin_page', 10, 2 );

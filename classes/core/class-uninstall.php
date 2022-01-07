@@ -46,4 +46,4 @@ class Uninstall {
 			Log::info('Error during SWPE uninstall.'.$e);
 		}
 	}
-}
+} 

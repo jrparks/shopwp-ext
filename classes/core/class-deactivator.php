@@ -39,4 +39,4 @@ class Deactivator {
 			Log::info('Error during SWPE deactivation: '.$e);
 		}
 	}
-}
+} 

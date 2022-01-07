@@ -38,7 +38,7 @@ class External_Images {
 			'thumbnail_url_field_save', 'action', 'save_post', $this, 'thumbnail_url_field_save', 10, 2 );
 		$this->registry->add_hook( 
 			'thumbnail_external_replace', 'filter', 'post_thumbnail_html', $this, 'thumbnail_external_replace', 10, PHP_INT_MAX );			
-	}
+	} 
 	
 	public function disable_ext_image_support() {
 		Log::debug('SWPE Disabling Default External Image Support.', true);

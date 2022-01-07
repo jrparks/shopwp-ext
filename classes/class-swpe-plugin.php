@@ -64,4 +64,4 @@ class SWPE_Plugin {
 			$api = new Api();
 			$api->setup();
 	}
-}
+} 

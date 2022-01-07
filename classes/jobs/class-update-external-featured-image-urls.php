@@ -29,7 +29,7 @@ class Update_External_Featured_Image_Urls {
 			'post_status' => 'publish',
 			'posts_per_page' => -1, // getting all posts of a post type
 			'no_found_rows' => true,
-		);
+		); 
 
 		$Products = \ShopWP\Factories\API\Items\Products_Factory::build();
 		$loop = new \WP_Query( $args );

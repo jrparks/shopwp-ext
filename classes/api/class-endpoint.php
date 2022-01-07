@@ -27,7 +27,7 @@ class Endpoint {
 	public function setup() {
 		$this->registry->add_hook( 
 		'register_job_trigger_endpoint', 'action', 'rest_api_init', $this, 'register_job_trigger_endpoint', 10, 2 );
-	}
+	} 
 	
 	public function register_job_trigger_endpoint() {
 		register_rest_route('swpe/api/v1', '/updateExtImages', [

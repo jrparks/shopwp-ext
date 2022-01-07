@@ -42,4 +42,4 @@ function swpe_autoloader( $class_name ) {
         }
         require_once $location;
     }
-}
+} 
