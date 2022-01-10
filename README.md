@@ -5,6 +5,8 @@ ShopWP Extensions enable further integration with your existing site and Shopify
 
 With the use of the Shop WP plugin I have extended it through a separate plugin to allow for External Image Support using your product Shopify Images as the external external featured images directly from the CDN.
 
+The custom wps_products post type has been modified to show the external featured image from shopify with an option to manually update and remove the url.
+
 Also there is a CRON available to pull the updated image URLs once a day. I will change this to automatically ingest the correct image URL's once the appropriate hook is added to the Shop WP Pro plugin. 
 
 Enjoy!
