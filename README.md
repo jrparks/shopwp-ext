@@ -5,7 +5,7 @@ ShopWP Extensions enable further integration with your existing site and Shopify
 
 With the use of the Shop WP plugin I have extended it through a separate plugin to allow for External Image Support using your product Shopify Images as the external external featured images directly from the CDN.
 
-Also there is a CRON available to pull the updated image URLs once a day. I will change this to automatically injest the correct image URL's once the appropriate hook is added to the Shop WP Pro plugin. 
+Also there is a CRON available to pull the updated image URLs once a day. I will change this to automatically ingest the correct image URL's once the appropriate hook is added to the Shop WP Pro plugin. 
 
 Enjoy!
 
@@ -13,7 +13,7 @@ Enjoy!
 
 You can install the plugin and enable both settings within the plugin. There is a button to manually run the product image sync so you don't need to wait for a day for the CRON to run.
 
-Once that is completed you can simply modify your theme to utalize your new product featured images.
+Once that is completed you can simply modify your theme to utilize your new product featured images.
 
 An example would be to alter your theme to incorporate your Shopify product images as shown below:
 
@@ -71,5 +71,5 @@ Optional parameters include the $size, $width and $height.
 	@param string $width - <OPTIONAL> width of the image in pixels 
 	@param string $height - <OPTIONAL> height of the image in pixels
 
-## This template is amazing! How can I ever repay you?
+## This plugin is amazing! How can I ever repay you?
 There's no need to credit me in your code. Enjoy!!
