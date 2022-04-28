@@ -1,2 +1,9 @@
+2022.04.28 - version 1.0.2
+ - Updated plugin to support Shop wp 5, minor change to get-product
+
+2022.01.15 - version 1.0.1
+ - Added in CDN Domains Input to inject preconnect and dns-prefetch headers for the Shopify CDN within the Wordpress site.
+ - Added a switch that allows administrators to retain plugin settings after the plugin is deleted.
+
 2022.01.07 - version 1.0.0
  * Initial release

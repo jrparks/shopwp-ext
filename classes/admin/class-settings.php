@@ -41,6 +41,8 @@ class Settings {
 	public function trigger_action_options( $new_value, $old_value ) {
 		$inp1 = 'enable_external_feature_image_url';
 		$inp2 = 'enable_external_image_update_daily_cron';
+		$inp3 = 'shopify_cdn_domains';
+		$inp4 = 'remove_data_when_plugin_deleted';
 		if ( $new_value !== $old_value && ! empty( $new_value ) ) {
 			if ( isset($new_value[$inp1]) && !isset($old_value[$inp1]) ) {
 				Log::debug('SWPE Enable Img Support', true);
@@ -57,8 +59,61 @@ class Settings {
 				Log::debug('SWPE Disable Daily Cron Support', true);
 				Job::unschedule_external_product_images_cron_job(); 
 			}
+
+			if ( isset($new_value[$inp3]) && !isset($old_value[$inp3]) ) {
+				Log::debug('SWPE Enable Preconnect and DNS Prefetch', true);
+				this->addHeaderHook();
+			} elseif ( !isset($new_value[$inp3]) && isset($old_value[$inp3]) ) {
+				Log::debug('SWPE Disable Preconnect and DNS Prefetch', true);
+				this->removeHeaderHook();
+			}
+
+			if ( isset($new_value[$inp4]) && !isset($old_value[$inp4]) ) {
+				Log::debug('SWPE Remove Data When Plugin Deleted', true);
+			} elseif ( !isset($new_value[$inp2]) && isset($old_value[$inp2]) ) {
+				Log::debug('SWPE Retain Data When Plugin Deleted', true);
+			}
 		}
 		return $new_value;
+	}
+
+	public function addHeaderHook() {
+		$this->registry->add_hook( 'addCdnDomainHeaders', 'action', 'wp_head', $this, 'addCdnDomainHeaders', 10, 2 );
+	}
+
+	public function removeHeaderHook() {
+		$this->registry->remove_hook( 'addCdnDomainHeaders', 'action');
+	}
+
+	public function addCdnDomainHeaders() {
+		$cdn = '';
+		$opt = get_option('swpe_admin_option_name');
+		if (isset($opt['shopify_cdn_domains']) && $opt['shopify_cdn_domains'] !== '') {
+			$cdn = $opt['shopify_cdn_domains'];
+		}
+
+		$separator = ',';
+
+		if( strpos($cdn, $separator) !== false ) {
+			$domains = explode($separator, $cdn);
+			foreach ($domains as $domain) {
+				printf('<link rel="preconnect" href="'.$domain.'" crossorigin />');
+				printf('<link rel="dns-prefetch" href="'.$domain.'" />');
+			}
+		} elseif ($cdn != '') {
+			$domain = $cdn;
+			printf('<link rel="preconnect" href="'.$domain.'" crossorigin />');
+			printf('<link rel="dns-prefetch" href="'.$domain.'" />');
+		}
+	}
+
+	public static function removePluginData() {
+		$enabled = false;
+		$opt = get_option('swpe_admin_option_name');
+		if (isset($opt['remove_data_when_plugin_deleted']) && $opt['remove_data_when_plugin_deleted'] === 'remove_data_when_plugin_deleted') {
+			$enabled = true;
+		}
+		return $enabled;
 	}
 	
 	public function isExtImageSupportEnabled() {
@@ -198,6 +253,22 @@ class Settings {
 			'swpe_admin', // page
 			'admin_setting_section' // section
 		);
+
+		add_settings_field(
+			'shopify_cdn_domains', // id
+			'Shopify CDN Domains (comma separated)', // title
+			array( $this, 'shopify_cdn_domains_callback' ), // callback
+			'swpe_admin', // page
+			'admin_setting_section' // section
+		);
+
+		add_settings_field(
+			'remove_data_when_plugin_deleted', // id
+			'Remove Plugin Data When Plugin Deleted', // title
+			array( $this, 'remove_data_when_plugin_deleted_callback' ), // callback
+			'swpe_admin', // page
+			'admin_setting_section' // section
+		);
 	}
 
 	public function admin_sanitize($input) {
@@ -208,6 +279,14 @@ class Settings {
 
 		if ( isset( $input['enable_external_image_update_daily_cron'] ) ) {
 			$sanitary_values['enable_external_image_update_daily_cron'] = $input['enable_external_image_update_daily_cron'];
+		}
+
+		if ( isset( $input['swpe_shopify_cdn_domains'] ) ) {
+			$sanitary_values['swpe_shopify_cdn_domains'] = $input['swpe_shopify_cdn_domains'];
+		}
+
+		if ( isset( $input['remove_data_when_plugin_deleted'] ) ) {
+			$sanitary_values['remove_data_when_plugin_deleted'] = $input['remove_data_when_plugin_deleted'];
 		}
 		return $sanitary_values;
 	}
@@ -228,6 +307,20 @@ class Settings {
 		printf(
 			'<input type="checkbox" class="swpe-ui-toggle" name="swpe_admin_option_name[enable_external_image_update_daily_cron]" id="enable_external_image_update_daily_cron" value="enable_external_image_update_daily_cron" %s> <label for="enable_external_image_update_daily_cron">* Requires WP-Cron</label><div class="wrap"><button type="button" id="run_job">Run Job</button>'.$spinner.'</div>',
 			( isset( $this->admin_options['enable_external_image_update_daily_cron'] ) && $this->admin_options['enable_external_image_update_daily_cron'] === 'enable_external_image_update_daily_cron' ) ? 'checked' : ''
+		);
+	}
+
+	public function shopify_cdn_domains_callback() {
+		$swpe-shopify-cdn-domains_value = ( isset($this->admin_options['swpe_shopify_cdn_domains'] ) ) ? $this->admin_options['swpe_shopify_cdn_domains']: '';
+		printf(
+			'<input type="text" class="swpe-shopify-cdn-domains" name="swpe_admin_option_name[swpe_shopify_cdn_domains]" id="swpe_shopify_cdn_domains" value="' . $swpe-shopify-cdn-domains_value .'">'
+		);
+	}
+
+	public function remove_data_when_plugin_deleted_callback() {
+		printf(
+			'<input type="checkbox" class="swpe-ui-toggle" name="swpe_admin_option_name[remove_data_when_plugin_deleted]" id="remove_data_when_plugin_deleted" value="remove_data_when_plugin_deleted" %s>',
+			( isset( $this->admin_options['remove_data_when_plugin_deleted'] ) && $this->admin_options['remove_data_when_plugin_deleted'] === 'remove_data_when_plugin_deleted' ) ? 'checked' : ''
 		);
 	}
 }

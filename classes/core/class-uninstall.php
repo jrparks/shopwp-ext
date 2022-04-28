@@ -19,6 +19,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 use SWPE\Utils\Log;
+use SWPE\Admin\Settings;
 use SWPE\Admin\Config;
 use SWPE\Utils\HookRegistry;
 use SWPE\Jobs\Update_External_Featured_Image_Urls as Job;
@@ -40,7 +41,28 @@ class Uninstall {
 			Job::unschedule_external_product_images_cron_job();
 			
 			// Remove plugin options
-			delete_option('swpe_admin_option_name');
+			$remove = Settings::removePluginData();
+			if ($remove) {
+				delete_option('swpe_admin_option_name');
+
+				$meta_type  = 'user';
+				$user_id    = 0; // This will be ignored, since we are deleting for all users.
+				$meta_key   = '_thumbnail_ext_url';
+				$meta_value = ''; // Also ignored. The meta will be deleted regardless of value.
+				$delete_all = true;
+				delete_metadata( $meta_type, $user_id, $meta_key, $meta_value, $delete_all );
+			}
+
+			// Remove the custom value entered into the thumbnail_id
+			$args = array(
+				'posts_per_page' => -1,
+				'post_type' => 'wps_products',
+				'suppress_filters' => true
+			);
+			$posts_array = get_posts( $args );
+			foreach($posts_array as $post_array) {
+				update_post_meta($post_array->ID, '_thumbnail_id', '');
+			}
 			
 		} catch (Error $e) {
 			Log::info('Error during SWPE uninstall.'.$e);

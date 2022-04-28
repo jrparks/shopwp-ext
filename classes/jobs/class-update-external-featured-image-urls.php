@@ -58,7 +58,8 @@ class Update_External_Featured_Image_Urls {
 						}
 					'
 				]);
-				$image_src = $result -> product -> images -> edges[0] -> node -> originalSrc;
+				// $image_src = $result -> product -> images -> edges[0] -> node -> originalSrc;
+				$image_src = product -> images -> edges[0] -> node -> originalSrc; // Updated for Shop WP v5 code
 				Log::debug('Product Image URL: '.$image_src);
 				if ( ! empty( $image_src ) ) {
 					$obj = new \SWPE\Images\External_Images();
